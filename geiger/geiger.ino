@@ -15,7 +15,6 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-unsigned long totalCounts = 0;
 unsigned long currentCounts = 0;
 unsigned long previousMillis = 0;
 unsigned long nextIntegrationCounter = 0;
@@ -53,7 +52,7 @@ void initSerial() {
 }
 
 void onGeigerEvent() {
-  totalCounts++;
+  currentCounts++;
 }
 
 void initBluetooth() {
@@ -65,8 +64,6 @@ void calculateResult() {
   unsigned long deltaTime = currentMillis - previousMillis;
   nextIntegrationCounter = (INTEGRATION_PERIOD - deltaTime) / 1000;
 
-  currentCounts = totalCounts;
-  
   if (deltaTime > INTEGRATION_PERIOD) {
     previousMillis = currentMillis;
 
