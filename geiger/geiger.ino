@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <SoftwareSerial.h>
 
 #define MINUTE_PERIOD 60000
 #define INTEGRATION_PERIOD 30000
@@ -14,6 +15,7 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+SoftwareSerial BlueTooth(10, 11);
 
 unsigned long currentCounts = 0;
 unsigned long previousMillis = 0;
@@ -56,7 +58,7 @@ void onGeigerEvent() {
 }
 
 void initBluetooth() {
-  // TODO add connection
+  BlueTooth.begin(9600);
 }
 
 void calculateResult() {
@@ -85,6 +87,10 @@ void updateDisplay() {
   display.setCursor(0, 47);
   display.println((String) microSivertsHour + " uSv/h");
   display.display();
+}
+
+void updateBluetooth() {
+  BlueTooth.println((String) millis() + ";" + countsPerMinute + ";" + microSivertsHour);
 }
 
 void updateSerial() {
